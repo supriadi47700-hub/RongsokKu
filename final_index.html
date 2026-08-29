@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RongsokKu - Admin Lembang</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+body{margin:0;background:#F0F2F5;font-family:system-ui;padding:12px}
+.card{background:white;border-radius:16px;padding:16px;margin:10px auto;max-width:600px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+input{padding:12px;border:1px solid #ddd;border-radius:10px;width:100%;box-sizing:border-box;margin:6px 0}
+button{padding:12px 16px;border:0;border-radius:10px;font-weight:bold;cursor:pointer}
+.btn-blue{background:#1877F2;color:white;width:100%}
+.btn-green{background:#00A86B;color:white}
+.btn{width:100%;padding:12px;border:0;border-radius:10px;font-weight:700;cursor:pointer}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#strukArea{display:none;justify-content:center;background:#eee;padding:20px;position:fixed;top:0;left:0;right:0;bottom:0;z-index:99;overflow:auto}
+#struk{width:300px;background:white;padding:16px;font-family:'Courier New',monospace;font-size:13px;color:black;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.item{border:1px solid #eee;border-radius:12px;padding:10px;margin:8px 0;display:flex;gap:10px;cursor:pointer;transition:.2s}
+.item:hover{background:#f9fff9;border-color:#00A86B}
+</style>
+</head>
+<body>
+<div class="card">
+<a href="data:text/html;base64,PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9ImlkIj4KPGhlYWQ+CjxtZXRhIGNoYXJzZXQ9IlVURi04Ij4KPG1ldGEgbmFtZT0idmlld3BvcnQiIGNvbnRlbnQ9IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xLjAiPgo8dGl0bGU+Um9uZ3Nva0t1IC0gUGVuanVhbDwvdGl0bGU+CjxzdHlsZT4KKntib3gtc2l6aW5nOmJvcmRlci1ib3h9Ym9keXttYXJnaW46MDtmb250LWZhbWlseTpzeXN0ZW0tdWk7YmFja2dyb3VuZDojZjBmMmY1fQouY2FyZHtiYWNrZ3JvdW5kOndoaXRlO2JvcmRlci1yYWRpdXM6MTZweDtwYWRkaW5nOjE2cHg7bWFyZ2luOjEycHg7Ym94LXNoYWRvdzowIDJweCAxMHB4IHJnYmEoMCwwLDAsLjA3KX0KLmJ0bnt3aWR0aDoxMDAlO3BhZGRpbmc6MTRweDtib3JkZXI6MDtib3JkZXItcmFkaXVzOjEycHg7Zm9udC13ZWlnaHQ6NzAwO2ZvbnQtc2l6ZToxNnB4O2N1cnNvcjpwb2ludGVyfQouYnRuLWJsdWV7YmFja2dyb3VuZDojMTg3N0YyO2NvbG9yOndoaXRlfS5idG4tZ3JlZW57YmFja2dyb3VuZDojMDBBODZCO2NvbG9yOndoaXRlfQppbnB1dCxzZWxlY3R7d2lkdGg6MTAwJTtwYWRkaW5nOjEycHg7Ym9yZGVyOjFweCBzb2xpZCAjZGRkO2JvcmRlci1yYWRpdXM6MTBweDttYXJnaW46NnB4IDB9CiNjYW1lcmF7d2lkdGg6MTAwJTtib3JkZXItcmFkaXVzOjEycHg7YmFja2dyb3VuZDojMDAwO2FzcGVjdC1yYXRpbzo0LzN9Ci5wcmV2aWV3e3dpZHRoOjEwMCU7Ym9yZGVyLXJhZGl1czoxMnB4O2Rpc3BsYXk6bm9uZTttYXJnaW4tdG9wOjhweH0KPC9zdHlsZT4KPC9oZWFkPgo8Ym9keT4KPGRpdiBjbGFzcz0iY2FyZCIgaWQ9ImxvZ2luQ2FyZCI+CjxoMiBzdHlsZT0ibWFyZ2luOjAiPuKZu++4jyBSb25nc29rS3U8L2gyPjxwIHN0eWxlPSJjb2xvcjojNjY2O21hcmdpbjo0cHggMCAxMnB4Ij5Mb2dpbiBQZW5qdWFsIExlbWJhbmc8L3A+CjxpbnB1dCBpZD0icGluIiBwbGFjZWhvbGRlcj0iUElOOiAxMjM0NTYiIHR5cGU9InRlbCI+CjxidXR0b24gY2xhc3M9ImJ0biBidG4tYmx1ZSIgb25jbGljaz0ibG9naW4oKSI+TWFzdWs8L2J1dHRvbj4KPC9kaXY+CjxkaXYgY2xhc3M9ImNhcmQiIGlkPSJhcHBDYXJkIiBzdHlsZT0iZGlzcGxheTpub25lIj4KPGgzPkhhbG8sIDxzcGFuIGlkPSJuYW1hVXNlciI+PC9zcGFuPiE8L2gzPgo8dmlkZW8gaWQ9ImNhbWVyYSIgYXV0b3BsYXkgcGxheXNpbmxpbmU+PC92aWRlbz4KPGltZyBpZD0icHJldmlldyIgY2xhc3M9InByZXZpZXciPgo8ZGl2IHN0eWxlPSJkaXNwbGF5OmZsZXg7Z2FwOjhweDttYXJnaW46MTBweCAwIj4KPGJ1dHRvbiBjbGFzcz0iYnRuIiBzdHlsZT0iYmFja2dyb3VuZDojZWVlIiBvbmNsaWNrPSJkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnZmlsZUlucHV0JykuY2xpY2soKSI+8J+TgSBHYWxlcmk8L2J1dHRvbj4KPGJ1dHRvbiBjbGFzcz0iYnRuIiBzdHlsZT0iYmFja2dyb3VuZDojZWVlIiBvbmNsaWNrPSJ0YWtlUGhvdG8oKSI+8J+TuCBGb3RvPC9idXR0b24+CjwvZGl2Pgo8aW5wdXQgdHlwZT0iZmlsZSIgaWQ9ImZpbGVJbnB1dCIgYWNjZXB0PSJpbWFnZS8qIiBjYXB0dXJlPSJlbnZpcm9ubWVudCIgc3R5bGU9ImRpc3BsYXk6bm9uZSI+CjxzZWxlY3QgaWQ9ImplbmlzIj48b3B0aW9uPkthcmR1czwvb3B0aW9uPjxvcHRpb24+Qm90b2wgUGxhc3Rpazwvb3B0aW9uPjxvcHRpb24+QmVzaTwvb3B0aW9uPjxvcHRpb24+S2VydGFzPC9vcHRpb24+PG9wdGlvbj5MYWlubnlhPC9vcHRpb24+PC9zZWxlY3Q+CjxpbnB1dCBpZD0iYmVyYXQiIHR5cGU9Im51bWJlciIgcGxhY2Vob2xkZXI9IkJlcmF0IGtnIChjb250b2g6IDIuNSkiIHN0ZXA9IjAuMSI+CjxpbnB1dCBpZD0iYWxhbWF0IiBwbGFjZWhvbGRlcj0iQWxhbWF0IGplbXB1dCI+CjxidXR0b24gY2xhc3M9ImJ0biBidG4tZ3JlZW4iIG9uY2xpY2s9ImtpcmltKCkiPktpcmltIGtlIEFkbWluPC9idXR0b24+CjxjYW52YXMgaWQ9ImNhbnZhcyIgc3R5bGU9ImRpc3BsYXk6bm9uZSI+PC9jYW52YXM+CjxkaXYgaWQ9InN0YXR1cyIgc3R5bGU9Im1hcmdpbi10b3A6MTBweDtmb250LXdlaWdodDo2MDAiPjwvZGl2Pgo8YnV0dG9uIGNsYXNzPSJidG4iIHN0eWxlPSJtYXJnaW4tdG9wOjIwcHg7YmFja2dyb3VuZDojZjVmNWY1IiBvbmNsaWNrPSJsb2NhdGlvbi5yZWxvYWQoKSI+TG9nb3V0PC9idXR0b24+CjwvZGl2Pgo8c2NyaXB0IHR5cGU9Im1vZHVsZSI+CmltcG9ydCB7IGluaXRpYWxpemVBcHAgfSBmcm9tICJodHRwczovL3d3dy5nc3RhdGljLmNvbS9maXJlYmFzZWpzLzEwLjEyLjAvZmlyZWJhc2UtYXBwLmpzIjsKaW1wb3J0IHsgZ2V0RmlyZXN0b3JlLCBjb2xsZWN0aW9uLCBhZGREb2MsIHF1ZXJ5LCB3aGVyZSwgZ2V0RG9jcywgc2VydmVyVGltZXN0YW1wIH0gZnJvbSAiaHR0cHM6Ly93d3cuZ3N0YXRpYy5jb20vZmlyZWJhc2Vqcy8xMC4xMi4wL2ZpcmViYXNlLWZpcmVzdG9yZS5qcyI7CmltcG9ydCB7IGdldFN0b3JhZ2UsIHJlZiwgdXBsb2FkQnl0ZXMsIGdldERvd25sb2FkVVJMIH0gZnJvbSAiaHR0cHM6Ly93d3cuZ3N0YXRpYy5jb20vZmlyZWJhc2Vqcy8xMC4xMi4wL2ZpcmViYXNlLXN0b3JhZ2UuanMiOwppbXBvcnQgeyBnZXRBdXRoLCBzaWduSW5Bbm9ueW1vdXNseSB9IGZyb20gImh0dHBzOi8vd3d3LmdzdGF0aWMuY29tL2ZpcmViYXNlanMvMTAuMTIuMC9maXJlYmFzZS1hdXRoLmpzIjsKY29uc3QgZmlyZWJhc2VDb25maWcgPSB7IGFwaUtleToiQUl6YVN5QWRibUw2SnRDQUNjbTFYbjUwZkVZTkpZNmNvUFVpbG5VIiwgYXV0aERvbWFpbjoicm9uZ3Nva2t1LWIxODgzLmZpcmViYXNlYXBwLmNvbSIsIHByb2plY3RJZDoicm9uZ3Nva2t1LWIxODgzIiwgc3RvcmFnZUJ1Y2tldDoicm9uZ3Nva2t1LWIxODgzLmZpcmViYXNlc3RvcmFnZS5hcHAiLCBtZXNzYWdpbmdTZW5kZXJJZDoiNTQxMzc4NTUwMzQxIiwgYXBwSWQ6IjE6NTQxMzc4NTUwMzQxOndlYjpiNTk5YmJiMWY5MzEzMWFhNTQyMTJjIiB9Owpjb25zdCBhcHA9aW5pdGlhbGl6ZUFwcChmaXJlYmFzZUNvbmZpZyk7IGNvbnN0IGRiPWdldEZpcmVzdG9yZShhcHApOyBjb25zdCBzdG9yYWdlPWdldFN0b3JhZ2UoYXBwKTsgY29uc3QgYXV0aD1nZXRBdXRoKGFwcCk7CmF3YWl0IHNpZ25JbkFub255bW91c2x5KGF1dGgpOwpsZXQgY3VycmVudFVzZXI9bnVsbDsgbGV0IHBob3RvQmxvYj1udWxsOwpuYXZpZ2F0b3IubWVkaWFEZXZpY2VzLmdldFVzZXJNZWRpYSh7dmlkZW86e2ZhY2luZ01vZGU6ImVudmlyb25tZW50In19KS50aGVuKHM9PmRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdjYW1lcmEnKS5zcmNPYmplY3Q9cykuY2F0Y2goKCk9Pnt9KTsKd2luZG93LnRha2VQaG90bz0oKT0+eyBjb25zdCB2PWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdjYW1lcmEnKTsgY29uc3QgYz1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnY2FudmFzJyk7IGMud2lkdGg9di52aWRlb1dpZHRoOyBjLmhlaWdodD12LnZpZGVvSGVpZ2h0OyBjLmdldENvbnRleHQoJzJkJykuZHJhd0ltYWdlKHYsMCwwKTsgYy50b0Jsb2IoYj0+eyBwaG90b0Jsb2I9YjsgY29uc3QgcD1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncHJldmlldycpOyBwLnNyYz1VUkwuY3JlYXRlT2JqZWN0VVJMKGIpOyBwLnN0eWxlLmRpc3BsYXk9J2Jsb2NrJzsgdi5zdHlsZS5kaXNwbGF5PSdub25lJzsgfSx7dHlwZTonaW1hZ2UvanBlZycscXVhbGl0eTowLjd9KTsgfQpkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnZmlsZUlucHV0JykuYWRkRXZlbnRMaXN0ZW5lcignY2hhbmdlJyxlPT57IGNvbnN0IGY9ZS50YXJnZXQuZmlsZXNbMF07IGlmKCFmKXJldHVybjsgcGhvdG9CbG9iPWY7IGNvbnN0IHA9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3ByZXZpZXcnKTsgcC5zcmM9VVJMLmNyZWF0ZU9iamVjdFVSTChmKTsgcC5zdHlsZS5kaXNwbGF5PSdibG9jayc7IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdjYW1lcmEnKS5zdHlsZS5kaXNwbGF5PSdub25lJzsgfSk7CndpbmRvdy5sb2dpbj1hc3luYygpPT57IGNvbnN0IHBpbj1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncGluJykudmFsdWUudHJpbSgpOyBpZighcGluKXJldHVybiBhbGVydCgnSXNpIFBJTicpOyBjb25zdCBxPXF1ZXJ5KGNvbGxlY3Rpb24oZGIsIlBlbmp1YWwiKSx3aGVyZSgiUElOIiwiPT0iLHBpbikpOyBjb25zdCBzbmFwPWF3YWl0IGdldERvY3MocSk7IGlmKHNuYXAuZW1wdHkpcmV0dXJuIGFsZXJ0KCdQSU4gc2FsYWguIENvYmEgMTIzNDU2IHVudHVrIFVqYW5nJyk7IGN1cnJlbnRVc2VyPXNuYXAuZG9jc1swXS5kYXRhKCk7IGN1cnJlbnRVc2VyLmlkPXNuYXAuZG9jc1swXS5pZDsgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ25hbWFVc2VyJykuaW5uZXJUZXh0PWN1cnJlbnRVc2VyLk5hbWE7IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdsb2dpbkNhcmQnKS5zdHlsZS5kaXNwbGF5PSdub25lJzsgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2FwcENhcmQnKS5zdHlsZS5kaXNwbGF5PSdibG9jayc7IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdhbGFtYXQnKS52YWx1ZT1jdXJyZW50VXNlci5BbGFtYXR8fCcnOyB9CndpbmRvdy5raXJpbT1hc3luYygpPT57IGlmKCFwaG90b0Jsb2IpcmV0dXJuIGFsZXJ0KCdGb3RvIGR1bHUhJyk7IGNvbnN0IGplbmlzPWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdqZW5pcycpLnZhbHVlOyBjb25zdCBiZXJhdD1OdW1iZXIoZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2JlcmF0JykudmFsdWV8fDApOyBjb25zdCBhbGFtYXQ9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2FsYW1hdCcpLnZhbHVlOyBjb25zdCBzdD1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnc3RhdHVzJyk7IHN0LmlubmVyVGV4dD0n4o+zIFVwbG9hZGluZy4uLic7IHRyeXsgY29uc3QgcmY9cmVmKHN0b3JhZ2UsYHJvbmdzb2svJHtEYXRlLm5vdygpfS5qcGdgKTsgYXdhaXQgdXBsb2FkQnl0ZXMocmYscGhvdG9CbG9iKTsgY29uc3QgdXJsPWF3YWl0IGdldERvd25sb2FkVVJMKHJmKTsgYXdhaXQgYWRkRG9jKGNvbGxlY3Rpb24oZGIsIkJhcmFuZyIpLHsgUGVuanVhbF9JRDpjdXJyZW50VXNlci5pZCwgTmFtYV9QZW5qdWFsOmN1cnJlbnRVc2VyLk5hbWEsIEZvdG9fVVJMOnVybCwgSmVuaXM6amVuaXMsIEJlcmF0X1BlcmtpcmFhbjpiZXJhdCwgQWxhbWF0X0plbXB1dDphbGFtYXQsIFN0YXR1czoiTWFzdWsiLCBjcmVhdGVkQXQ6c2VydmVyVGltZXN0YW1wKCkgfSk7IHN0LmlubmVyVGV4dD0n4pyFIEJlcmhhc2lsIGRpa2lyaW0ga2UgQWRtaW4hJzsgcGhvdG9CbG9iPW51bGw7IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwcmV2aWV3Jykuc3R5bGUuZGlzcGxheT0nbm9uZSc7IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdjYW1lcmEnKS5zdHlsZS5kaXNwbGF5PSdibG9jayc7IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdiZXJhdCcpLnZhbHVlPScnOyB9Y2F0Y2goZSl7IHN0LmlubmVyVGV4dD0n4p2MIEVycm9yOiAnK2UubWVzc2FnZTsgY29uc29sZS5lcnJvcihlKTt9IH0KPC9zY3JpcHQ+CjwvYm9keT4KPC9odG1sPgo=" style="text-decoration:none;color:#1877F2">← Kembali ke Home</a>
+<h2 style="margin:10px 0 0">👑 Admin RongsokKu</h2>
+<p style="color:#666;margin:4px 0">Lembang • Barang Masuk</p>
+<div id="list">Loading...</div>
+</div>
+
+<div id="strukArea">
+<div id="struk">
+<center><b>RONGSOKKU</b><br>Lembang, Bandung<br>------------------------</center>
+<div id="isiStruk"></div>
+<center>------------------------<br>Terima kasih!<br><span id="tglStruk"></span></center>
+<div style="margin-top:12px;text-align:center">
+<button class="btn" style="background:#eee" onclick="document.getElementById('strukArea').style.display='none'">Tutup</button>
+</div>
+</div>
+</div>
+
+<div class="card" id="actionCard" style="display:none">
+<h3 id="detailJudul" style="margin:0"></h3>
+<p id="detailAlamat" style="color:#666;font-size:14px"></p>
+<img id="detailFoto" style="width:100%;border-radius:12px;max-height:300px;object-fit:cover">
+<div class="grid" style="margin-top:14px">
+<div><label>Berat Timbang (kg)</label><input id="beratFinal" type="number" step="0.1"></div>
+<div><label>Harga/kg</label><input id="hargaKg" type="number" value="5000"></div>
+</div>
+<label>Total Bayar</label><input id="totalBayar" readonly style="font-weight:bold;font-size:22px;background:#e8f5e9;color:#166534">
+<div class="grid" style="margin-top:12px">
+<button class="btn-green" onclick="selesaikan('58mm')">🖨️ Print 58mm</button>
+<button class="btn-green" style="background:#0d6e5e" onclick="selesaikan('80mm')">🖨️ Print 80mm</button>
+</div>
+<button class="btn-blue" style="margin-top:8px;background:#25D366" onclick="shareWA()">📤 Share PNG ke WA Penjual</button>
+<div id="selesaiStatus" style="margin-top:10px;font-weight:600"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, query, where, getDocs, doc, updateDoc, serverTimestamp, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAdbmL6JtCACcm1Xn50fEYNJY6coPUilnU",
+  authDomain: "rongsokku-b1883.firebaseapp.com",
+  projectId: "rongsokku-b1883",
+  storageBucket: "rongsokku-b1883.firebasestorage.app",
+  messagingSenderId: "541378550341",
+  appId: "1:541378550341:web:b599bbb1f93131aa54212c"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+await signInAnonymously(auth);
+
+let selectedId=null;
+let selectedData=null;
+
+const qMasuk = query(collection(db,"Barang"), where("Status","==","Masuk"));
+onSnapshot(qMasuk, snap=>{
+  if(snap.empty){ document.getElementById('list').innerHTML='<p style="color:#999;text-align:center;padding:20px">Belum ada barang masuk hari ini<br>💤</p>'; return; }
+  document.getElementById('list').innerHTML = snap.docs.map(d=>{
+    const x=d.data();
+    const tgl = x.createdAt?.toDate ? x.createdAt.toDate().toLocaleTimeString('id-ID') : '';
+    return `<div class="item" onclick="pilih('${d.id}')">
+      <img src="${x.Foto_URL}" style="width:70px;height:70px;object-fit:cover;border-radius:8px">
+      <div><b>${x.Nama_Penjual||'Warga'}</b><br>${x.Jenis} - ${x.Berat_Perkiraan}kg<br><small>📍 ${x.Alamat_Jemput?.substring(0,20)||''} • ${tgl}</small></div>
+    </div>`;
+  }).join('');
+  window._cache={}; snap.docs.forEach(d=>window._cache[d.id]=d.data());
+});
+
+window.pilih = (id)=>{
+  selectedId=id; selectedData=window._cache[id];
+  document.getElementById('actionCard').style.display='block';
+  document.getElementById('detailJudul').innerText=selectedData.Jenis+' - '+selectedData.Nama_Penjual;
+  document.getElementById('detailAlamat').innerText='📍 '+selectedData.Alamat_Jemput;
+  document.getElementById('detailFoto').src=selectedData.Foto_URL;
+  document.getElementById('beratFinal').value=selectedData.Berat_Perkiraan;
+  document.getElementById('hargaKg').value=5000;
+  hitung();
+  document.getElementById('actionCard').scrollIntoView({behavior:'smooth'});
+}
+
+function hitung(){
+  const b=Number(document.getElementById('beratFinal').value||0);
+  const h=Number(document.getElementById('hargaKg').value||0);
+  document.getElementById('totalBayar').value='Rp '+(b*h).toLocaleString('id-ID');
+}
+document.getElementById('beratFinal').addEventListener('input', hitung);
+document.getElementById('hargaKg').addEventListener('input', hitung);
+
+window.selesaikan = async (ukuran)=>{
+  const berat=Number(document.getElementById('beratFinal').value);
+  const hargaKg=Number(document.getElementById('hargaKg').value);
+  const total=berat*hargaKg;
+  const st=document.getElementById('selesaiStatus');
+  st.innerText='⏳ Menyimpan...';
+  await updateDoc(doc(db,"Barang",selectedId),{
+    Berat_Final: berat,
+    Harga_Per_Kg: hargaKg,
+    Harga_Final: total,
+    Status: "Selesai",
+    updatedAt: serverTimestamp()
+  });
+  document.getElementById('isiStruk').innerHTML=`
+    Penjual: ${selectedData.Nama_Penjual}<br>
+    Jenis: ${selectedData.Jenis}<br>
+    Berat: ${berat} kg<br>
+    Harga: Rp ${hargaKg}/kg<br>
+    <b>Total: Rp ${total.toLocaleString('id-ID')}</b><br>
+    Alamat: ${selectedData.Alamat_Jemput}
+  `;
+  document.getElementById('tglStruk').innerText=new Date().toLocaleString('id-ID');
+  document.getElementById('strukArea').style.display='flex';
+  const w = ukuran==='58mm'? 220 : 300;
+  document.getElementById('struk').style.width=w+'px';
+  st.innerText='✅ Selesai! Struk siap.';
+  setTimeout(()=>window.print(), 300);
+}
+
+window.shareWA = async ()=>{
+  const el=document.getElementById('struk');
+  document.getElementById('strukArea').style.display='flex';
+  const canvas=await html2canvas(el);
+  canvas.toBlob(async blob=>{
+    const file=new File([blob], "struk-rongsokku.png", {type:"image/png"});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file], title:"Struk RongsokKu", text:`Pembayaran ${selectedData.Nama_Penjual} - Rp ${document.getElementById('totalBayar').value}`});
+    }else{
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a'); a.href=url; a.download='struk-'+selectedData.Nama_Penjual+'.png'; a.click();
+      alert('Gambar struk didownload, silakan share manual ke WA');
+    }
+  });
+}
+</script>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
+  </html>
