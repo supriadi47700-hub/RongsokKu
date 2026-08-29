@@ -29,34 +29,36 @@
 *{box-sizing:border-box}body{margin:0;font-family:system-ui;background:#f0f2f5}
 .card{background:white;border-radius:16px;padding:20px;margin:12px;box-shadow:0 2px 10px rgba(0,0,0,.07);max-width:500px;margin-left:auto;margin-right:auto}
 .btn{width:100%;padding:14px;border:0;border-radius:12px;font-weight:700;font-size:16px;cursor:pointer;display:block;text-align:center;text-decoration:none;margin:8px 0}
-.btn-blue{background:#1877F2;color:white}.btn-green{background:#00A86B;color:white}.btn-dark{background:#111;color:white}
+.btn-blue{background:#1877F2;color:white}.btn-green{background:#00A86B;color:white}
 .hero{text-align:center;padding:24px 12px}
 .hero h1{font-size:32px;margin:0}.hero p{color:#666}
 input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0}
 #camera{width:100%;border-radius:12px;background:#000;aspect-ratio:4/3}
 .preview{width:100%;border-radius:12px;display:none;margin-top:8px}
+#debug{font-size:11px;color:#888;background:#f5f5f5;padding:8px;border-radius:8px;margin-top:8px;white-space:pre-wrap}
 </style>
 </head>
 <body>
 <div id="landing">
 <div class="hero">
 <h1>♻️ RongsokKu</h1>
-<p>Bank Sampah Digital Lembang - Jual Rongsok Jadi Cuan</p>
+<p>Bank Sampah Digital Lembang</p>
 </div>
 <div class="card">
 <h3 style="margin:0 0 12px">Mau masuk sebagai apa?</h3>
-<a class="btn btn-green" href="#penjual" onclick="showPenjual()">🙋‍♂️ Saya Warga - Mau Jual Rongsok</a>
+<a class="btn btn-green" href="#" onclick="showPenjual();return false">🙋‍♂️ Saya Warga - Jual Rongsok</a>
 <a class="btn btn-blue" href="admin.html">👑 Saya Admin / Pengepul</a>
-<p style="font-size:12px;color:#888;text-align:center;margin-top:12px">PIN Penjual demo: 123456 (Ujang)</p>
+<p style="font-size:12px;color:#888;text-align:center;margin-top:12px">PIN demo: 123456</p>
 </div>
 </div>
 
 <div id="penjualSection" style="display:none">
 <div class="card" id="loginCard">
-<h2 style="margin:0">♻️ RongsokKu</h2><p style="color:#666;margin:4px 0 12px">Login Penjual Lembang</p>
-<input id="pin" placeholder="PIN: 123456" type="tel">
+<h2 style="margin:0">♻️ RongsokKu</h2><p style="color:#666;margin:4px 0 12px">Login Penjual</p>
+<input id="pin" placeholder="PIN: 123456" type="tel" value="123456">
 <button class="btn btn-blue" onclick="login()">Masuk</button>
 <button class="btn" style="background:#eee" onclick="showLanding()">← Kembali</button>
+<div id="debug"></div>
 </div>
 <div class="card" id="appCard" style="display:none">
 <h3>Halo, <span id="namaUser"></span>!</h3>
@@ -68,8 +70,8 @@ input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;ma
 </div>
 <input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none">
 <select id="jenis"><option>Kardus</option><option>Botol Plastik</option><option>Besi</option><option>Kertas</option><option>Lainnya</option></select>
-<input id="berat" type="number" placeholder="Berat kg (contoh: 2.5)" step="0.1">
-<input id="alamat" placeholder="Alamat jemput lengkap">
+<input id="berat" type="number" placeholder="Berat kg" step="0.1">
+<input id="alamat" placeholder="Alamat jemput">
 <button class="btn btn-green" onclick="kirim()">Kirim ke Admin</button>
 <canvas id="canvas" style="display:none"></canvas>
 <div id="status" style="margin-top:10px;font-weight:600"></div>
@@ -79,18 +81,25 @@ input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;ma
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 const firebaseConfig = { apiKey:"AIzaSyAdbmL6JtCACcm1Xn50fEYNJY6coPUilnU", authDomain:"rongsokku-b1883.firebaseapp.com", projectId:"rongsokku-b1883", storageBucket:"rongsokku-b1883.firebasestorage.app", messagingSenderId:"541378550341", appId:"1:541378550341:web:b599bbb1f93131aa54212c" };
 const app=initializeApp(firebaseConfig); const db=getFirestore(app); const storage=getStorage(app); const auth=getAuth(app);
-await signInAnonymously(auth);
+
+const debug = (msg)=>{ document.getElementById('debug').innerText += msg + "\n"; console.log(msg); }
+
+try{
+  await signInAnonymously(auth);
+  debug("✅ Auth OK");
+}catch(e){ debug("❌ Auth error: "+e.message); }
+
 let currentUser=null; let photoBlob=null;
 
 window.showPenjual=()=>{
  document.getElementById('landing').style.display='none';
  document.getElementById('penjualSection').style.display='block';
- navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}}).then(s=>document.getElementById('camera').srcObject=s).catch(()=>{});
+ navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}}).then(s=>document.getElementById('camera').srcObject=s).catch(err=>debug("Camera: "+err));
 }
 window.showLanding=()=>{
  document.getElementById('landing').style.display='block';
@@ -99,8 +108,46 @@ window.showLanding=()=>{
 
 window.takePhoto=()=>{ const v=document.getElementById('camera'); const c=document.getElementById('canvas'); c.width=v.videoWidth; c.height=v.videoHeight; c.getContext('2d').drawImage(v,0,0); c.toBlob(b=>{ photoBlob=b; const p=document.getElementById('preview'); p.src=URL.createObjectURL(b); p.style.display='block'; v.style.display='none'; },{type:'image/jpeg',quality:0.7}); }
 document.getElementById('fileInput').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; photoBlob=f; const p=document.getElementById('preview'); p.src=URL.createObjectURL(f); p.style.display='block'; document.getElementById('camera').style.display='none'; });
-window.login=async()=>{ const pin=document.getElementById('pin').value.trim(); if(!pin)return alert('Isi PIN'); const q=query(collection(db,"Penjual"),where("PIN","==",pin)); const snap=await getDocs(q); if(snap.empty)return alert('PIN salah. Coba 123456 untuk Ujang'); currentUser=snap.docs[0].data(); currentUser.id=snap.docs[0].id; document.getElementById('namaUser').innerText=currentUser.Nama; document.getElementById('loginCard').style.display='none'; document.getElementById('appCard').style.display='block'; document.getElementById('alamat').value=currentUser.Alamat||''; }
-window.kirim=async()=>{ if(!photoBlob)return alert('Foto dulu!'); const jenis=document.getElementById('jenis').value; const berat=Number(document.getElementById('berat').value||0); const alamat=document.getElementById('alamat').value; const st=document.getElementById('status'); st.innerText='⏳ Uploading...'; try{ const rf=ref(storage,`rongsok/${Date.now()}.jpg`); await uploadBytes(rf,photoBlob); const url=await getDownloadURL(rf); await addDoc(collection(db,"Barang"),{ Penjual_ID:currentUser.id, Nama_Penjual:currentUser.Nama, Foto_URL:url, Jenis:jenis, Berat_Perkiraan:berat, Alamat_Jemput:alamat, Status:"Masuk", createdAt:serverTimestamp() }); st.innerText='✅ Berhasil dikirim ke Admin!'; photoBlob=null; document.getElementById('preview').style.display='none'; document.getElementById('camera').style.display='block'; document.getElementById('berat').value=''; }catch(e){ st.innerText='❌ Error: '+e.message; console.error(e);} }
+
+window.login=async()=>{
+  const pin=document.getElementById('pin').value.trim();
+  if(!pin)return alert('Isi PIN');
+  debug("🔍 Cari PIN: "+pin);
+  try{
+    const snap=await getDocs(collection(db,"Penjual"));
+    debug("Total penjual di DB: "+snap.size);
+    if(snap.empty){ alert('Belum ada data Penjual di Firestore! Bikin dulu collection Penjual'); return; }
+    let found=null;
+    snap.forEach(d=>{
+      const data=d.data();
+      debug(`- ${data.Nama}: PIN=${data.PIN} (${typeof data.PIN})`);
+      if(String(data.PIN)===String(pin)) found={id:d.id, ...data};
+    });
+    if(!found){ alert('PIN salah. Data yang ada: '+snap.docs.map(d=>d.data().Nama+':'+d.data().PIN).join(', ')); return; }
+    currentUser=found;
+    document.getElementById('namaUser').innerText=currentUser.Nama;
+    document.getElementById('loginCard').style.display='none';
+    document.getElementById('appCard').style.display='block';
+    document.getElementById('alamat').value=currentUser.Alamat||'';
+    debug("✅ Login sukses: "+currentUser.Nama);
+  }catch(e){ debug("❌ Error: "+e.message); alert("Error: "+e.message+"\nCek Rules Firestore harus allow read,write true"); }
+}
+
+window.kirim=async()=>{
+  if(!photoBlob)return alert('Foto dulu!');
+  const jenis=document.getElementById('jenis').value;
+  const berat=Number(document.getElementById('berat').value||0);
+  const alamat=document.getElementById('alamat').value;
+  const st=document.getElementById('status'); st.innerText='⏳ Uploading...';
+  try{
+    const rf=ref(storage,`rongsok/${Date.now()}.jpg`);
+    await uploadBytes(rf,photoBlob);
+    const url=await getDownloadURL(rf);
+    await addDoc(collection(db,"Barang"),{ Penjual_ID:currentUser.id, Nama_Penjual:currentUser.Nama, Foto_URL:url, Jenis:jenis, Berat_Perkiraan:berat, Alamat_Jemput:alamat, Status:"Masuk", createdAt:serverTimestamp() });
+    st.innerText='✅ Berhasil dikirim ke Admin!';
+    photoBlob=null; document.getElementById('preview').style.display='none'; document.getElementById('camera').style.display='block'; document.getElementById('berat').value='';
+  }catch(e){ st.innerText='❌ Error: '+e.message; }
+}
 </script>
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
-</html>
+  </html>
