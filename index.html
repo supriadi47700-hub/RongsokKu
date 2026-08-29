@@ -24,40 +24,59 @@
 </style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RongsokKu - Penjual</title>
+<title>RongsokKu Lembang</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:system-ui;background:#f0f2f5}
-.card{background:white;border-radius:16px;padding:16px;margin:12px;box-shadow:0 2px 10px rgba(0,0,0,.07)}
-.btn{width:100%;padding:14px;border:0;border-radius:12px;font-weight:700;font-size:16px;cursor:pointer}
-.btn-blue{background:#1877F2;color:white}.btn-green{background:#00A86B;color:white}
+.card{background:white;border-radius:16px;padding:20px;margin:12px;box-shadow:0 2px 10px rgba(0,0,0,.07);max-width:500px;margin-left:auto;margin-right:auto}
+.btn{width:100%;padding:14px;border:0;border-radius:12px;font-weight:700;font-size:16px;cursor:pointer;display:block;text-align:center;text-decoration:none;margin:8px 0}
+.btn-blue{background:#1877F2;color:white}.btn-green{background:#00A86B;color:white}.btn-dark{background:#111;color:white}
+.hero{text-align:center;padding:24px 12px}
+.hero h1{font-size:32px;margin:0}.hero p{color:#666}
 input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0}
 #camera{width:100%;border-radius:12px;background:#000;aspect-ratio:4/3}
 .preview{width:100%;border-radius:12px;display:none;margin-top:8px}
 </style>
 </head>
 <body>
+<div id="landing">
+<div class="hero">
+<h1>♻️ RongsokKu</h1>
+<p>Bank Sampah Digital Lembang - Jual Rongsok Jadi Cuan</p>
+</div>
+<div class="card">
+<h3 style="margin:0 0 12px">Mau masuk sebagai apa?</h3>
+<a class="btn btn-green" href="#penjual" onclick="showPenjual()">🙋‍♂️ Saya Warga - Mau Jual Rongsok</a>
+<a class="btn btn-blue" href="admin.html">👑 Saya Admin / Pengepul</a>
+<p style="font-size:12px;color:#888;text-align:center;margin-top:12px">PIN Penjual demo: 123456 (Ujang)</p>
+</div>
+</div>
+
+<div id="penjualSection" style="display:none">
 <div class="card" id="loginCard">
 <h2 style="margin:0">♻️ RongsokKu</h2><p style="color:#666;margin:4px 0 12px">Login Penjual Lembang</p>
 <input id="pin" placeholder="PIN: 123456" type="tel">
 <button class="btn btn-blue" onclick="login()">Masuk</button>
+<button class="btn" style="background:#eee" onclick="showLanding()">← Kembali</button>
 </div>
 <div class="card" id="appCard" style="display:none">
 <h3>Halo, <span id="namaUser"></span>!</h3>
 <video id="camera" autoplay playsinline></video>
 <img id="preview" class="preview">
 <div style="display:flex;gap:8px;margin:10px 0">
-<button class="btn" style="background:#eee" onclick="document.getElementById('fileInput').click()">📁 Galeri</button>
-<button class="btn" style="background:#eee" onclick="takePhoto()">📸 Foto</button>
+<button class="btn" style="background:#eee;flex:1" onclick="document.getElementById('fileInput').click()">📁 Galeri</button>
+<button class="btn" style="background:#eee;flex:1" onclick="takePhoto()">📸 Foto</button>
 </div>
 <input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none">
 <select id="jenis"><option>Kardus</option><option>Botol Plastik</option><option>Besi</option><option>Kertas</option><option>Lainnya</option></select>
 <input id="berat" type="number" placeholder="Berat kg (contoh: 2.5)" step="0.1">
-<input id="alamat" placeholder="Alamat jemput">
+<input id="alamat" placeholder="Alamat jemput lengkap">
 <button class="btn btn-green" onclick="kirim()">Kirim ke Admin</button>
 <canvas id="canvas" style="display:none"></canvas>
 <div id="status" style="margin-top:10px;font-weight:600"></div>
 <button class="btn" style="margin-top:20px;background:#f5f5f5" onclick="location.reload()">Logout</button>
 </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -67,7 +86,17 @@ const firebaseConfig = { apiKey:"AIzaSyAdbmL6JtCACcm1Xn50fEYNJY6coPUilnU", authD
 const app=initializeApp(firebaseConfig); const db=getFirestore(app); const storage=getStorage(app); const auth=getAuth(app);
 await signInAnonymously(auth);
 let currentUser=null; let photoBlob=null;
-navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}}).then(s=>document.getElementById('camera').srcObject=s).catch(()=>{});
+
+window.showPenjual=()=>{
+ document.getElementById('landing').style.display='none';
+ document.getElementById('penjualSection').style.display='block';
+ navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}}).then(s=>document.getElementById('camera').srcObject=s).catch(()=>{});
+}
+window.showLanding=()=>{
+ document.getElementById('landing').style.display='block';
+ document.getElementById('penjualSection').style.display='none';
+}
+
 window.takePhoto=()=>{ const v=document.getElementById('camera'); const c=document.getElementById('canvas'); c.width=v.videoWidth; c.height=v.videoHeight; c.getContext('2d').drawImage(v,0,0); c.toBlob(b=>{ photoBlob=b; const p=document.getElementById('preview'); p.src=URL.createObjectURL(b); p.style.display='block'; v.style.display='none'; },{type:'image/jpeg',quality:0.7}); }
 document.getElementById('fileInput').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; photoBlob=f; const p=document.getElementById('preview'); p.src=URL.createObjectURL(f); p.style.display='block'; document.getElementById('camera').style.display='none'; });
 window.login=async()=>{ const pin=document.getElementById('pin').value.trim(); if(!pin)return alert('Isi PIN'); const q=query(collection(db,"Penjual"),where("PIN","==",pin)); const snap=await getDocs(q); if(snap.empty)return alert('PIN salah. Coba 123456 untuk Ujang'); currentUser=snap.docs[0].data(); currentUser.id=snap.docs[0].id; document.getElementById('namaUser').innerText=currentUser.Nama; document.getElementById('loginCard').style.display='none'; document.getElementById('appCard').style.display='block'; document.getElementById('alamat').value=currentUser.Alamat||''; }
